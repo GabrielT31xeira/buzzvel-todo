@@ -20,3 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login',[\App\Http\Controllers\api\AuthController::class,'login'])->name('login');
 Route::post('/logout',[\App\Http\Controllers\api\AuthController::class,'logout'])->middleware('auth:sanctum');
+Route::get('/tasks', [\App\Http\Controllers\TaskController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/tasks/{id}', [\App\Http\Controllers\TaskController::class, 'show'])->middleware('auth:sanctum');
+Route::put('/tasks/{id}', [\App\Http\Controllers\TaskController::class, 'update'])->middleware('auth:sanctum');
+Route::post('/tasks', [\App\Http\Controllers\TaskController::class, 'store'])->middleware('auth:sanctum');
+Route::delete('/tasks/{id}', [\App\Http\Controllers\TaskController::class, 'delete'])->middleware('auth:sanctum');
