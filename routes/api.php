@@ -19,9 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login',[\App\Http\Controllers\api\AuthController::class,'login'])->name('login');
-Route::post('/logout',[\App\Http\Controllers\api\AuthController::class,'logout'])->middleware('auth:sanctum');
-Route::get('/tasks', [\App\Http\Controllers\api\TaskController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'show'])->middleware('auth:sanctum');
-Route::put('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'update'])->middleware('auth:sanctum');
-Route::post('/tasks', [\App\Http\Controllers\api\TaskController::class, 'store'])->middleware('auth:sanctum');
-Route::delete('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'delete'])->middleware('auth:sanctum');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout', [\App\Http\Controllers\api\AuthController::class, 'logout']);
+    Route::get('/tasks', [\App\Http\Controllers\api\TaskController::class, 'index']);
+    Route::get('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'show']);
+    Route::put('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'update']);
+    Route::post('/tasks', [\App\Http\Controllers\api\TaskController::class, 'store']);
+    Route::delete('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'delete']);
+});
