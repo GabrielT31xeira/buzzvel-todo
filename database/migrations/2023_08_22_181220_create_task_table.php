@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('description');
             $table->boolean('completed');
             $table->date('completed_at')->nullable();
-            $table->date('deleted_at')->nullable();
             // Foreing keys
             $table->unsignedBigInteger('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users');
