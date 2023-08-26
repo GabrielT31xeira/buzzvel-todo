@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
         $tasks = Task::with('creator', 'updater', 'files')->get();
         return response()->json(['message' => 'Task list', 'tasks' => $tasks], 200);
     }
 
-    public function store(Request $req)
+    public function store(Request $req): \Illuminate\Http\JsonResponse
     {
         $validate = Validator::make($req->all(),[
             'title' => 'required|unique:task|max:255',
@@ -56,7 +56,7 @@ class TaskController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id): \Illuminate\Http\JsonResponse
     {
         try {
             $task = Task::with('creator', 'updater', 'files')->find($id);
@@ -69,7 +69,7 @@ class TaskController extends Controller
         }
     }
 
-    public function update($id, Request $req)
+    public function update($id, Request $req): \Illuminate\Http\JsonResponse
     {
         $validate = Validator::make($req->all(),[
             'title' => 'required|unique:task|max:255',
@@ -119,7 +119,7 @@ class TaskController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete($id): \Illuminate\Http\JsonResponse
     {
         $task = Task::find($id);
 
