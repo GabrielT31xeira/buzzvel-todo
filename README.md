@@ -38,7 +38,8 @@ Use ``Bearer <token>``
 ## Update task
 ``http://localhost:8000/api/tasks/1``
 - Validators ``title: required|unique``, ``description: required``, ``pdf:max 20000 caracters``
-```{
+```
+{
     "title":"Update 1",
     "description":"Update 1",
     "pdf":["base64 enconde"]
