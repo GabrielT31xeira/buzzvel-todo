@@ -24,7 +24,7 @@ Use ``Bearer <token>``
 
 ## Create a new task - post
 ``http://localhost:8000/api/tasks``
-- Validators ``title: required|unique``, ``description: required``, ``pdf:max 20000 caracters``
+- Validators ``title: required|unique|max:255``, ``description: required|max:255``, ``pdf:max 20000 caracters``
 ```
 {
     "title":"Example 1",
