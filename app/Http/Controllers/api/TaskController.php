@@ -15,6 +15,10 @@ class TaskController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         $tasks = Task::with('creator', 'updater', 'files')->get();
+        if(count($tasks) === 0) {
+            return response()->json(['message' => 'No tasks found']);
+        }
+
         return response()->json(['message' => 'Task list', 'tasks' => $tasks], 200);
     }
 
@@ -72,7 +76,7 @@ class TaskController extends Controller
     public function update($id, Request $req): \Illuminate\Http\JsonResponse
     {
         $validate = Validator::make($req->all(),[
-            'title' => 'required|unique:task|max:255',
+            'title' => 'required|max:255',
             'description' => 'required|max:255',
             'pdf.*' => ['max:20000']
         ]);
