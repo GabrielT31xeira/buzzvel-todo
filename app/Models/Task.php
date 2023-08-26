@@ -10,7 +10,7 @@ class Task extends Model
     use HasFactory;
 
     protected $table = 'task';
-    
+
     protected $fillable = [
         'id',
         'title',
@@ -36,6 +36,6 @@ class Task extends Model
 
     public function files()
     {
-        return $this->hasMany(Files::class, 'task_id');
+        return $this->hasMany(File::class, 'task_id');
     }
 }

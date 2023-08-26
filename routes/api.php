@@ -18,8 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login',[\App\Http\Controllers\api\AuthController::class,'login'])->name('login');
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::post('/login',[\App\Http\Controllers\api\AuthController::class,'login']);
+Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/logout', [\App\Http\Controllers\api\AuthController::class, 'logout']);
     Route::get('/tasks', [\App\Http\Controllers\api\TaskController::class, 'index']);
     Route::get('/tasks/{id}', [\App\Http\Controllers\api\TaskController::class, 'show']);

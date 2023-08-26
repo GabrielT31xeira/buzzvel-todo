@@ -21,8 +21,8 @@ class TaskController extends Controller
     public function store(Request $req)
     {
         $validate = Validator::make($req->all(),[
-            'title' => 'required|unique:task',
-            'description' => 'required',
+            'title' => 'required|unique:task|max:255',
+            'description' => 'required|max:255',
             'pdf.*' => ['max:20000']
         ]);
 
@@ -72,8 +72,8 @@ class TaskController extends Controller
     public function update($id, Request $req)
     {
         $validate = Validator::make($req->all(),[
-            'title' => 'required|unique:task',
-            'description' => 'required',
+            'title' => 'required|unique:task|max:255',
+            'description' => 'required|max:255',
             'pdf.*' => ['max:20000']
         ]);
 
