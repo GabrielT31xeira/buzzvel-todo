@@ -4,7 +4,7 @@
 - Enter laravel container ``docker exec -it <id-container> /bin/bash`` and run ``php artisan migrate`` and ``php artisan db:seed --class=UserSeeder``.
 - Acess routes
 
-## Login
+## Login - post
 ``http://localhost:8000/api/login``
 
 ``` 
@@ -35,7 +35,7 @@ Use ``Bearer <token>``
 ## Get specific task - get
 ``http://localhost:8000/api/tasks/1``
 
-## Update task
+## Update task - put
 ``http://localhost:8000/api/tasks/1``
 - Validators ``title: required|max:255``, ``description: required|max:255``, ``pdf:max 20000 caracters``
 ```
@@ -46,5 +46,5 @@ Use ``Bearer <token>``
 }
 ```
 
-## Delete a task
+## Delete a task - delete
 ``http://localhost:8000/api/tasks/1``
