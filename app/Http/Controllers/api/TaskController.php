@@ -133,7 +133,6 @@ class TaskController extends Controller
 
         $task->files()->delete();
 
-        // Exclua a tarefa
         $task->delete();
 
         return response()->json(['message' => 'task deleted successfully'],200);
