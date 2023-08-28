@@ -14,17 +14,22 @@ class TaskController extends Controller
 {
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $tasks = Task::with('creator', 'updater', 'files')->get();
-        if(count($tasks) === 0) {
-            return response()->json(['message' => 'No tasks found']);
-        }
+        try {
+            $tasks = Task::with('creator', 'updater', 'files')->get();
+            if (count($tasks) === 0) {
+                return response()->json(['message' => 'No tasks found']);
+            }
 
-        return response()->json(['message' => 'Task list', 'tasks' => $tasks], 200);
+            return response()->json(['message' => 'Task list', 'tasks' => $tasks], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $req): \Illuminate\Http\JsonResponse
     {
-        $validate = Validator::make($req->all(),[
+        $validate = Validator::make($req->all(), [
             'title' => 'required|unique:task|max:255',
             'description' => 'required|max:255',
             'pdf.*' => ['max:20000']
@@ -45,7 +50,7 @@ class TaskController extends Controller
             $task->created_by = $user->id;
             $task->save();
             $file = $req->input('pdf');
-            foreach ($file as $files){
+            foreach ($file as $files) {
                 $newFile = new File();
                 $newFile->pdf = $files;
                 $newFile->task_id = $task->id;
@@ -67,7 +72,7 @@ class TaskController extends Controller
             if (!$task) {
                 return response()->json(['message' => 'task not found'], 404);
             }
-            return response()->json(['task' => $task],200);
+            return response()->json(['task' => $task], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -75,7 +80,7 @@ class TaskController extends Controller
 
     public function update($id, Request $req): \Illuminate\Http\JsonResponse
     {
-        $validate = Validator::make($req->all(),[
+        $validate = Validator::make($req->all(), [
             'title' => 'required|max:255',
             'description' => 'required|max:255',
             'pdf.*' => ['max:20000']
@@ -95,8 +100,7 @@ class TaskController extends Controller
             $user = Auth::user();
             $task->title = $req->input('title');
             $task->description = $req->input('description');
-            if ($req->input('completed'))
-            {
+            if ($req->input('completed')) {
                 $task->completed = $req->input('completed');
                 $data = new \DateTime();
                 $task->completed_at = $data->format('Y-m-d');
@@ -108,7 +112,7 @@ class TaskController extends Controller
 
             $file = $req->input('pdf');
 
-            foreach ($file as $files){
+            foreach ($file as $files) {
                 $newFile = new File();
                 $newFile->pdf = $files;
                 $newFile->task_id = $task->id;
@@ -116,7 +120,7 @@ class TaskController extends Controller
             }
             DB::commit();
 
-            return response()->json(['message' => 'Task updated'],200);
+            return response()->json(['message' => 'Task updated'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
@@ -125,16 +129,21 @@ class TaskController extends Controller
 
     public function delete($id): \Illuminate\Http\JsonResponse
     {
-        $task = Task::find($id);
+        try {
+            $task = Task::find($id);
 
-        if (!$task) {
-            return response()->json(['message' => 'task not found'], 404);
+            if (!$task) {
+                return response()->json(['message' => 'task not found'], 404);
+            }
+
+            $task->files()->delete();
+
+            $task->delete();
+
+            return response()->json(['message' => 'task deleted successfully'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        $task->files()->delete();
-
-        $task->delete();
-
-        return response()->json(['message' => 'task deleted successfully'],200);
     }
 }
