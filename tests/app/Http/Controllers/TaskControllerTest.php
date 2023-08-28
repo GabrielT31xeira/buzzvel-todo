@@ -19,6 +19,15 @@ class TaskControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
+        // Create task
+        $task = Task::factory()->state([
+            'created_by' => $user->id
+        ])->create();
+
+        File::factory()->state([
+            'task_id' => $task->id
+        ])->create();
+
         $response = $this->get('api/tasks');
 
         $response->assertStatus(200);
