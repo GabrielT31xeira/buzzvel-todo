@@ -98,7 +98,7 @@ class TaskController extends Controller
             if ($req->input('completed'))
             {
                 $task->completed = $req->input('completed');
-                $data = new DateTime();
+                $data = new \DateTime();
                 $task->completed_at = $data->format('Y-m-d');
             } else {
                 $task->completed = false;
