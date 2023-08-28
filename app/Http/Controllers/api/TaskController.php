@@ -22,7 +22,6 @@ class TaskController extends Controller
 
             return response()->json(['message' => 'Task list', 'tasks' => $tasks], 200);
         } catch (\Exception $e) {
-            DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -142,7 +141,6 @@ class TaskController extends Controller
 
             return response()->json(['message' => 'task deleted successfully'], 200);
         } catch (\Exception $e) {
-            DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
